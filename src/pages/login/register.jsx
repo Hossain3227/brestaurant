@@ -4,9 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
+import Useaxiospublic from "../../hooks/useaxiospublic";
 
 
 const Register = () => {
+
+    const axiosPublic = Useaxiospublic();
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const { createUser, updateUserProfile } = useContext(AuthContext);
@@ -21,7 +24,17 @@ const Register = () => {
                 updateUserProfile(data.name, data.photoURL)
                     .then(() => {
                         console.log('user profile info updated')
-                        reset();
+
+                        // create user entry
+
+                        const userInfo = {
+                            name: data.name,
+                            email: data.email
+                        }
+                        axiosPublic.post('/users', userInfo)
+                        .then(res => {
+                            if(res.data.insertedId){
+                                reset();
                         Swal.fire({
                             position: 'top-end',
                             icon: 'success',
@@ -30,6 +43,11 @@ const Register = () => {
                             timer: 1500
                         });
                         navigate('/');
+                            }
+                        })
+
+
+                        
 
                     })
                     .catch(error => console.log(error))

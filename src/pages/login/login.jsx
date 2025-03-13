@@ -3,7 +3,8 @@ import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-s
 import { AuthContext } from '../../providers/authprovider';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-
+import { FaGoogle } from "react-icons/fa";
+import toast from 'react-hot-toast';
 
 
 
@@ -12,15 +13,28 @@ import Swal from 'sweetalert2';
 
 const Login = () => {
   const [disabled, setDisabled] = useState(true);
-    const { signIn } = useContext(AuthContext);
+    // const { signIn } = useContext(AuthContext);
     // const captchaRef = useRef(null);
     
     
     const navigate = useNavigate();
+    const {signIn, logInWithGoogle} = useContext(AuthContext);
     const location = useLocation();
   
 
     const from = location.state?.from?.pathname || "/";
+
+    const handleGoogleSignIn = async() => {
+ try{
+	await logInWithGoogle()
+	toast.success('login succesfull')
+	navigate(from,{replace:true})
+ } catch(err) {
+	console.log(err)
+	toast.error(err.message)
+
+ }
+}
 
 
     const handleLogin = event => {
@@ -137,6 +151,11 @@ const Login = () => {
             </div>
           </form>
           <p className='text-center p-4'><small>New Here? <Link to="/signup">Create an account</Link></small> </p>
+          <div className='flex items-center justify-center p-4'>
+            <span className='mr-2'>Or login by</span>
+            
+            <button onClick={handleGoogleSignIn} className=' p-2 text-2xl border-2 border-black rounded-lg'><FaGoogle /></button>
+          </div>
         </div>
       </div>
     </div>

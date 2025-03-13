@@ -21,7 +21,7 @@ const NavBar = () => {
         <li><NavLink to={'/menu'}>Our Menu</NavLink></li>
         <li><NavLink to={'/order/salad'}>Order food</NavLink></li>
         <li>
-          <Link to='/'>
+          <Link to='/dashboard/mycart'>
           <button className="btn bg-black border-none">
             <FaShoppingCart className="mr-2 text-white"></FaShoppingCart>
             <div className="badge badge-secondary">
